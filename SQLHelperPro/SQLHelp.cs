@@ -181,6 +181,37 @@ namespace SQLHelperPro
             
         }
 
+        public static DataSet ExeDataSetSqls(Dictionary<string,string> sqlandtablename)
+        {
+            SqlConnection sqlcon = new SqlConnection(connstring);
+            SqlCommand command = new SqlCommand();
+            command.Connection = sqlcon;
+            DataSet ds = new DataSet();
+            try
+            {
+                sqlcon.Open();
+                foreach (string item in sqlandtablename.Keys)
+                {
+                    command.CommandText = sqlandtablename[item];
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    adapter.Fill(ds, item);
+                }
+                return ds;
+                
+
+            }
+            catch (SqlException ex)
+            {
+
+                throw new Exception("应用程序与数据库连接出错，具体内容： " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
 
     }
 }
